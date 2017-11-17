@@ -20,7 +20,7 @@ namespace Searcher
         public Form1()
         {
             InitializeComponent();
-            var lines = File.ReadAllLines("Path.ini");
+            string[] lines = File.Exists("Path.ini") ? File.ReadAllLines("Path.ini") : new []{""}; 
             tbWhere.Text = lines[0];//@"D:\Projects\mis-oda-pba-su-3\WebUI\Views";
             label4.Text = @"0";
             label6.Text = @"0";
@@ -39,6 +39,17 @@ namespace Searcher
                 MessageBox.Show(this, @"Что искать?", @"Searcher", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
+
+            if (tbWhere.Text == String.Empty)
+            {
+                MessageBox.Show(this, @"Где искать?", @"Searcher", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
+            if (File.Exists("Path.ini"))
+                File.Delete("Path.ini");
+
+            File.AppendAllText("Path.ini", tbWhere.Text);
 
             List<string> extentionList = new List<string>();
             foreach (Control control in this.gbExtensions.Controls)
