@@ -88,6 +88,9 @@ namespace Searcher
             List<string> files = Directory.EnumerateFiles(folder).ToList();
             foreach (var file in files)
             {
+                if(file.Contains(@"\obj\") || file.Contains(@"\bin\"))
+                    continue;
+
                 if (extList.Contains(GetExtension(file)))
                 {
                     lookinFiles++;
