@@ -20,7 +20,7 @@ namespace Searcher
         public Form1()
         {
             InitializeComponent();
-            string[] lines = File.Exists("Path.ini") ? File.ReadAllLines("Path.ini") : new []{""}; 
+            string[] lines = File.Exists("Path.ini") ? File.ReadAllLines("Path.ini") : new[] { "" };
             tbWhere.Text = lines[0];//@"D:\Projects\mis-oda-pba-su-3\WebUI\Views";
             label4.Text = @"0";
             label6.Text = @"0";
@@ -54,7 +54,7 @@ namespace Searcher
             List<string> extentionList = new List<string>();
             foreach (Control control in this.gbExtensions.Controls)
             {
-                if(control.GetType() == typeof(CheckBox) && ((CheckBox)control).Checked)
+                if (control.GetType() == typeof(CheckBox) && ((CheckBox)control).Checked)
                 {
                     extentionList.Add(control.Text);
                 }
@@ -83,12 +83,90 @@ namespace Searcher
             }
         }
 
+        private List<string> GetPlainFileList(string folder)
+        {
+            List<string> result = Directory.EnumerateFiles(folder).ToList();
+
+            List<string> folders = Directory.EnumerateDirectories(folder).Where(x => !x.Contains(@"\obj\") && !x.Contains(@"\bin\")).ToList();
+
+            if (folders.Count > 0)
+            {
+                Parallel.For(0, folders.Count, new ParallelOptions() { MaxDegreeOfParallelism = 4 }, (i, pls) =>
+                   {
+                       result.AddRange(GetPlainFileList(folders[i]));
+                   });
+            }
+
+            return result;
+        }
+
+        private void Search2(string folder, List<string> extList)
+        {
+            object locker = new object();
+
+            var files = GetPlainFileList(folder);
+
+            Parallel.For(0, files.Count, new ParallelOptions() { MaxDegreeOfParallelism = 4 }, (i, pls) =>
+               {
+                   var file = files[i];
+                   if (!string.IsNullOrEmpty(file))
+                   {
+                       //if (file.Contains(@"\obj\") || file.Contains(@"\bin\"))
+                       //    pls.Break();
+
+                       try
+                       {
+                           if (extList.Contains(GetExtension(file)))
+                           {
+                               lock (locker)
+                               {
+                                   lookinFiles++;
+                               }
+                               using (FileStream fs = new FileStream(file, FileMode.Open, FileAccess.Read))
+                               using (StreamReader sr = new StreamReader(fs, Encoding.UTF8))
+                               {
+                                   string line;
+                                   int rowCounter = 0;
+                                   while ((line = sr.ReadLine()) != null)
+                                   {
+                                       rowCounter++;
+                                       if (line.Trim().ToLower().Contains(tbWhat.Text.Trim().ToLower()))
+                                       {
+                                           int rowsCount = dt.Rows.Count;
+                                           DataRow row = dt.NewRow();
+                                           row["ID"] = rowsCount + 1;
+                                           row["RowNumber"] = rowCounter;
+                                           row["RowValue"] = line.Trim();
+                                           row["FileName"] = file;
+                                           dt.Rows.Add(row);
+                                       }
+                                   }
+                               }
+
+                           }
+                       }
+                       catch (Exception e)
+                       {
+                           Console.WriteLine(e);
+                           throw;
+                       }
+                   }
+
+
+               });
+            label4.Text = dt.Rows.Count.ToString();
+            label6.Text = lookinFiles.ToString();
+        }
+
         private void Search(string folder, List<string> extList)
         {
             List<string> files = Directory.EnumerateFiles(folder).ToList();
+
+
+
             foreach (var file in files)
             {
-                if(file.Contains(@"\obj\") || file.Contains(@"\bin\"))
+                if (file.Contains(@"\obj\") || file.Contains(@"\bin\"))
                     continue;
 
                 if (extList.Contains(GetExtension(file)))
@@ -112,7 +190,7 @@ namespace Searcher
                                 row["FileName"] = file;
                                 dt.Rows.Add(row);
                                 label4.Text = dt.Rows.Count.ToString();
-                                
+
                             }
                         }
                     }
@@ -144,7 +222,7 @@ namespace Searcher
         private void button2_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
-            if(Directory.Exists(tbWhere.Text))
+            if (Directory.Exists(tbWhere.Text))
                 folderBrowserDialog.SelectedPath = tbWhere.Text;
             else
                 folderBrowserDialog.RootFolder = Environment.SpecialFolder.MyComputer;
