@@ -162,14 +162,10 @@ namespace Searcher
         {
             List<string> files = Directory.EnumerateFiles(folder).ToList();
 
-
-
-            foreach (var file in files)
+            foreach (var ext in extList)
             {
-                if (file.Contains(@"\obj\") || file.Contains(@"\bin\"))
-                    continue;
-
-                if (extList.Contains(GetExtension(file)))
+                var extFiles = files.Where(x => x.EndsWith(ext) && !x.Contains(@"\obj\") && !x.Contains(@"\bin\") && !x.Contains(@"\vendor\") && !x.Contains(@"\webpack\"));
+                foreach (var file in extFiles)
                 {
                     lookinFiles++;
                     using (FileStream fs = new FileStream(file, FileMode.Open, FileAccess.Read))
@@ -190,7 +186,6 @@ namespace Searcher
                                 row["FileName"] = file;
                                 dt.Rows.Add(row);
                                 label4.Text = dt.Rows.Count.ToString();
-
                             }
                         }
                     }
