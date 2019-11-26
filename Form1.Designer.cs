@@ -44,11 +44,12 @@
             this.chkLess = new System.Windows.Forms.CheckBox();
             this.chkTs = new System.Windows.Forms.CheckBox();
             this.gbExtensions = new System.Windows.Forms.GroupBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.chkCsproj = new System.Windows.Forms.CheckBox();
             this.chkConfig = new System.Windows.Forms.CheckBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
+            this.chkTt = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.gbExtensions.SuspendLayout();
             this.SuspendLayout();
@@ -134,8 +135,6 @@
             // chkCshtml
             // 
             this.chkCshtml.AutoSize = true;
-            this.chkCshtml.Checked = true;
-            this.chkCshtml.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCshtml.Location = new System.Drawing.Point(10, 19);
             this.chkCshtml.Name = "chkCshtml";
             this.chkCshtml.Size = new System.Drawing.Size(59, 17);
@@ -207,7 +206,8 @@
             // gbExtensions
             // 
             this.gbExtensions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.gbExtensions.Controls.Add(this.checkBox1);
+            this.gbExtensions.Controls.Add(this.chkTt);
+            this.gbExtensions.Controls.Add(this.chkCsproj);
             this.gbExtensions.Controls.Add(this.chkConfig);
             this.gbExtensions.Controls.Add(this.chkCshtml);
             this.gbExtensions.Controls.Add(this.chkTs);
@@ -218,20 +218,20 @@
             this.gbExtensions.Controls.Add(this.chHtml);
             this.gbExtensions.Location = new System.Drawing.Point(1140, 79);
             this.gbExtensions.Name = "gbExtensions";
-            this.gbExtensions.Size = new System.Drawing.Size(75, 231);
+            this.gbExtensions.Size = new System.Drawing.Size(75, 252);
             this.gbExtensions.TabIndex = 13;
             this.gbExtensions.TabStop = false;
             this.gbExtensions.Text = "Extensions";
             // 
-            // checkBox1
+            // chkCsproj
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(10, 203);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(57, 17);
-            this.checkBox1.TabIndex = 14;
-            this.checkBox1.Text = ".csproj";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.chkCsproj.AutoSize = true;
+            this.chkCsproj.Location = new System.Drawing.Point(10, 203);
+            this.chkCsproj.Name = "chkCsproj";
+            this.chkCsproj.Size = new System.Drawing.Size(57, 17);
+            this.chkCsproj.TabIndex = 14;
+            this.chkCsproj.Text = ".csproj";
+            this.chkCsproj.UseVisualStyleBackColor = true;
             // 
             // chkConfig
             // 
@@ -273,6 +273,16 @@
             this.button2.Text = "...";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // chkTt
+            // 
+            this.chkTt.AutoSize = true;
+            this.chkTt.Location = new System.Drawing.Point(10, 227);
+            this.chkTt.Name = "chkTt";
+            this.chkTt.Size = new System.Drawing.Size(35, 17);
+            this.chkTt.TabIndex = 15;
+            this.chkTt.Text = ".tt";
+            this.chkTt.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -322,8 +332,9 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.CheckBox chkConfig;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox chkCsproj;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.CheckBox chkTt;
     }
 }
 
